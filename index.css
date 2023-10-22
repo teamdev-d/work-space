@@ -4,8 +4,6 @@
     font-family: "pf-videotext", sans-serif;
     font-weight: 400;
     font-style: normal;
-    margin: 0;
-    padding: 0;
 }
 
 h1 {
@@ -17,7 +15,7 @@ h2 {
     align-items: flex-start;
 }
 
-/* 共通 */
+/* 共通 */ 
 .border {
     border: 5px solid black;
 }
@@ -34,28 +32,36 @@ h2 {
     height: 100vh;
     text-align: center;
     justify-content: center;
+    align-items: center;
+    margin: 0 10%;
 }
 
-.container {
+/* bodyを白に指定 */
+body {
+    background: #fff;
+  }
+
+#container {
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 /* ゲームボード */
-#game__board {
+/* #game__board {
     width: 350px;
     height: 600px;
     margin-left: 100px;
     margin-right: 50px;
     position: relative;
-}
+} */
 
 /* 右側 */
 .right {
     width: 200px;
     height: 90wh;
-}
+} 
 
 /* 次のブロック */
 #next__block {
@@ -67,7 +73,7 @@ h2 {
 .score__box {
     height: 120px;
     margin-bottom: 80px;
-}
+} 
 
 /* ボタン */
 .btn__box {

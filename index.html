@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
-  <link rel="stylesheet" type="text/css" href="index.css" />
-  <script src="index.js" defer type="module"></script>
-  <link rel="stylesheet" href="https://use.typekit.net/siu5xkr.css">
-  <title>TETRIS</title>
-</head>
-<body>
-  <div class="wrapper">
-    <div class="container">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/siu5xkr.css" />
+    <title>TETRIS</title>
+  </head>
+  <body onload="init()">
+    <div class="wrapper">
       <h1>Tetris</h1>
       <!-- ゲームボード -->
-      <canvas id="game__board" class="btn border"></canvas>
+      <div id="container">
+        <canvas id="canvas" class="border"></canvas>
+      </div>
       <!-- 右側のブロック -->
       <div class="right">
-        <!-- 次のテトロミノ -->
-        <div id="next__block" class="border"></div>
-        <!-- スコア -->
-        <div class="score__box border">
-          <h2>Score</h2>
-          <div id="score"></div>
-        </div>
-        <!-- ボタン -->
-        <div class="btn__box">
-          <button id="pause" class="btn border">Pause</button>
-          <button id="retry" class="btn border">Retry</button>
-        </div>
-    </div>
-    </div>
-  </div>
-</body>
+          <!-- 次のテトロミノ -->
+          <div id="next__block" class="border"></div>
+          <!-- スコア -->
+          <h2 id="score" class="score__box border">Score</h2>
+          <!-- ボタン -->
+          <div class="btn__box">
+            <button id="pause" class="btn border">Pause</button>
+            <button id="retry" class="btn border">Retry</button>
+          </div>
+      </div>
+    <script src="index.js"></script>
+  </body>
 </html>
