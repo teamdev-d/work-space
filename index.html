@@ -3,11 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="styles.css" />
-  <script src="index.js" type="module"></script>
-  <title>Document</title>
+  <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+  <link rel="stylesheet" type="text/css" href="index.css" />
+  <script src="index.js" defer type="module"></script>
+  <link rel="stylesheet" href="https://use.typekit.net/siu5xkr.css">
+  <title>TETRIS</title>
 </head>
 <body>
-  <h1>こんにちは</h1>
+  <div class="wrapper">
+    <div class="container">
+      <h1>Tetris</h1>
+      <!-- ゲームボード -->
+      <canvas id="game__board" class="btn border"></canvas>
+      <!-- 右側のブロック -->
+      <div class="right">
+        <!-- 次のテトロミノ -->
+        <div id="next__block" class="border"></div>
+        <!-- スコア -->
+        <div class="score__box border">
+          <h2>Score</h2>
+          <div id="score"></div>
+        </div>
+        <!-- ボタン -->
+        <div class="btn__box">
+          <button id="pause" class="btn border">Pause</button>
+          <button id="retry" class="btn border">Retry</button>
+        </div>
+    </div>
+    </div>
+  </div>
 </body>
 </html>
