@@ -15,11 +15,14 @@ function gameLoop() {
 // ポーズ
 document.getElementById("pause").addEventListener("click", function () {
   isPaused = !isPaused;
+  alert("ポーズ");
+  console.log(isPaused);
 });
 // リスタート
 document.getElementById("retry").addEventListener("click", function () {
   // ゲームの初期化の状態
   isPaused = true; //一時停止
+  alert("リスタート");
 });
 
 // ゲーム再開
@@ -40,10 +43,10 @@ const PLAY_SCREEN_WIDTH = 10;
 const PLAY_SCREEN_HEIGHT = 20;
 
 // キャンバスIDの取得
-const CANVAS = document.getElementById("canvas");
+const CANVAS = document.getElementById('canvas');
 
 // 2dコンテキストの取得
-const CANVAS_2D = CANVAS.getContext("2d");
+const CANVAS_2D = CANVAS.getContext('2d');
 
 // キャンバスサイズ（＝プレイ画面のサイズ）
 const CANVAS_WIDTH = BLOCK_SIZE * PLAY_SCREEN_WIDTH;
@@ -108,8 +111,7 @@ let TETRO_TYPES = [
   ],
 ];
 
-//
-const tetColors = ["", "#6CF", "#F92", "#66F", "#C5C", "#FD2", "#F44", "#5B5"];
+const tetColors = ['', '#6CF', '#F92', '#66F', '#C5C', '#FD2', '#F44', '#5B5'];
 
 // TETRO_TYPESのインデックス番号をランダム取得
 let tetroTypesIndex = Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1;
@@ -132,12 +134,20 @@ let isGameOver = false;
 
 // テトリスプレイ画面描画処理
 const drawPlayScreen = () => {
-  // 背景色を指定
-  CANVAS_2D.fillStyle = "#FFF";
+  // 背景色を黒に指定
+  CANVAS_2D.fillStyle = '#FFF';
 
   // キャンバスを塗りつぶす
   CANVAS_2D.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
+  // 画面本体で動かせなくなったテトリミノを描画する
+  for (let y = 0; y < PLAY_SCREEN_HEIGHT; y++) {
+    for (let x = 0; x < PLAY_SCREEN_WIDTH; x++) {
+      if (SCREEN[y][x]) {
+        drawBlock(x, y, SCREEN[y][x]);
+      }
+    }
+  }
 
   // テトリミノを描画する
   for (let y = 0; y < TET_SIZE; y++) {
@@ -152,13 +162,14 @@ const drawPlayScreen = () => {
     }
   }
 
+  // ゲームオーバー時のメッセージ
   if (isGameOver) {
-    const GAME_OVER_MESSAGE = "GAME OVER";
-    CANVAS_2D.font = "40px 'pf-videotext, sans-serif";
+    const GAME_OVER_MESSAGE = 'GAME OVER';
+    CANVAS_2D.font = "40px 'Meiryo UI'";
     const width = CANVAS_2D.measureText(GAME_OVER_MESSAGE).width;
     const x = CANVAS_WIDTH / 2 - width / 2;
     const y = CANVAS_HEIGHT / 2 - 20;
-    CANVAS_2D.fillStyle = "white";
+    CANVAS_2D.fillStyle = 'black';
     CANVAS_2D.fillText(GAME_OVER_MESSAGE, x, y);
   }
 };
@@ -172,11 +183,11 @@ const drawBlock = (x, y, tetroTypesIndex) => {
   CANVAS_2D.fillStyle = tetColors[tetroTypesIndex];
   CANVAS_2D.fillRect(drawX, drawY, BLOCK_SIZE, BLOCK_SIZE);
   // 線の色を黒に設定
-  CANVAS_2D.strokeStyle = "black";
+  CANVAS_2D.strokeStyle = 'black';
   CANVAS_2D.strokeRect(drawX, drawY, BLOCK_SIZE, BLOCK_SIZE);
 };
 
-// 移動可能か判定
+// テトリミノが動けるかどうか判定する
 const canMove = (moveX, moveY, newTet = tetroMino) => {
   for (let y = 0; y < TET_SIZE; y++) {
     for (let x = 0; x < TET_SIZE; x++) {
@@ -184,7 +195,6 @@ const canMove = (moveX, moveY, newTet = tetroMino) => {
         // 現在のテトリミノの位置（tetroMinoDistanceX + x）に移動分を加える（＝移動後の座標）
         let nextX = tetroMinoDistanceX + x + moveX;
         let nextY = tetroMinoDistanceY + y + moveY;
-
 
         // 移動先にブロックがあるか判定
         if (
@@ -232,31 +242,30 @@ const createLeftRotateTet = () => {
 document.onkeydown = (e) => {
   if (isGameOver) return;
   switch (e.code) {
-    //左移動
-    case "ArrowLeft":
+    case 'ArrowLeft':
       if (canMove(-1, 0)) tetroMinoDistanceX--;
       break;
-    //右移動
-    case "ArrowRight":
+    case 'ArrowUp':
+      if (canMove(0, -1)) tetroMinoDistanceY--;
+      break;
+    case 'ArrowRight':
       if (canMove(1, 0)) tetroMinoDistanceX++;
       break;
-    //下移動
-    case "ArrowDown":
+    case 'ArrowDown':
       if (canMove(0, 1)) tetroMinoDistanceY++;
       break;
-    //回転
-    case "ArrowUp":
+    case 'KeyR':
       let newRTet = createRightRotateTet();
       if (canMove(0, 0, newRTet)) {
         tetroMino = newRTet;
       }
       break;
-    // case "KeyL":
-    //   let newLTet = createLeftRotateTet();
-    //   if (canMove(0, 0, newLTet)) {
-    //     tetroMino = newLTet;
-      // }
-      // break;
+    case 'KeyL':
+      let newLTet = createLeftRotateTet();
+      if (canMove(0, 0, newLTet)) {
+        tetroMino = newLTet;
+      }
+      break;
   }
   drawPlayScreen();
 };
@@ -273,6 +282,7 @@ const fixTet = () => {
   }
 };
 
+// そろった行を消す
 const clearLine = () => {
   // 一列になっている場所をスクリーン上から調べていく
   for (let y = 0; y < PLAY_SCREEN_HEIGHT; y++) {
@@ -318,10 +328,9 @@ const dropTet = () => {
 };
 
 // 画面を真ん中にする
-const CONTAINER = document.getElementById("container");
-CONTAINER.style.width = CANVAS_WIDTH + "px";
+const CONTAINER = document.getElementById('container');
+CONTAINER.style.width = CANVAS_WIDTH + 'px';
 
-// テトリミノの初期位置を設定
 const createTetPosition = () => {
   tetroMinoDistanceX = PLAY_SCREEN_WIDTH / 2 - TET_SIZE / 2;
   tetroMinoDistanceY = 0;
