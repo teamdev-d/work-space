@@ -6,28 +6,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
     <link rel="stylesheet" type="text/css" href="index.css" />
-    <link rel="stylesheet" href="https://use.typekit.net/siu5xkr.css" />
+    <script src="https://kit.fontawesome.com/c4efa77837.js" crossorigin="anonymous"></script>
     <title>TETRIS</title>
+    <script>
+      (function(d) {
+        var config = {
+          kitId: 'byu4tcx',
+          scriptTimeout: 3000,
+          async: true
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+    </script>
   </head>
   <body onload="init()">
     <div class="wrapper">
-      <h1>Tetris</h1>
-      <!-- ゲームボード -->
-      <div id="container">
-        <canvas id="canvas" class="border"></canvas>
+      <div class="tetris">
+        <div>
+        <div>
+        <h1>Tetris</h1>
+        <button id="info" class="btn border">操作説明</button>
       </div>
-      <!-- 右側のブロック -->
-      <div class="right">
-          <!-- 次のテトロミノ -->
-          <div id="next__block" class="border"></div>
+      <!-- モーダル -->
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close" id="close-button">&times;</span>
+          <h2>操作方法</h2>
+          <p>
+            <li>ブロックの左移動: <strong>← キー</strong></li>
+            <li>ブロックの右移動: <strong>→ キー</strong></li>
+            <li>ブロックの下移動: <strong>↓ キー</strong></li>
+            <li>ブロックの左回転: <strong>L キー</strong></li>
+            <li>ブロックの右回転: <strong>R キー</strong></li>
+          </p>
+      </div>
+    </div>
+
           <!-- スコア -->
-          <h2 id="score" class="score__box border">Score</h2>
+          <div class="score__box border">
+            <h2 id="score">Score</h2>
+            <p id="score-count"></p>
+          </div>
+          <div class="score__box border">
+            <h2 id="score">Delete Line</h2>
+            <p id="line-count"></p>
+          </div>
+        </div>
+        <!-- ゲームボード -->
+        <div id="container">
+          <canvas id="canvas" class="border"></canvas>
+        </div>
+        <!-- 右側のブロック -->
+        <div class="right">
+          <!-- 次のテトロミノ -->
+          <canvas id="next__block" class="border"></canvas>
+
           <!-- ボタン -->
-          <div class="btn__box">
-            <button id="pause" class="btn border">Pause</button>
+          <div class="btn__container">
             <button id="retry" class="btn border">Retry</button>
           </div>
-      </div>
+
+          <!-- 音楽 -->
+          <div>
+            <button id="play" class="audio btn border">
+              <i class="fa-solid fa-music"></i>
+            </button>
+          </div>
+        </div>
+     </div>
     <script src="index.js"></script>
   </body>
 </html>
