@@ -1,22 +1,51 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>テトリス</title>
-    <style>
-      body {
-        background: #888;
-      }
-      #container {
-        margin: 0 auto;
-      }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
+    <link rel="stylesheet" type="text/css" href="../index.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/siu5xkr.css" />
+    <title>TETRIS</title>
   </head>
   <body onload="init()">
-    <div id="container">
-      <canvas id="canvas"></canvas>
-    </div>
+    <div class="wrapper">
+      <div>
+        <h1>Tetris</h1>
+        <button id="info" class="btn border">Info</button>
+      </div>
+      <!-- モーダル -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+      <span class="close" id="close-button">&times;</span>
+    <h2>操作方法</h2>
+    <p>
+      <li>ブロックの左移動: <strong>← キー</strong></li>
+      <li>ブロックの右移動: <strong>→ キー</strong></li>
+      <li>ブロックの下移動: <strong>↓ キー</strong></li>
+      <li>ブロックの左回転: <strong>L キー</strong></li>
+      <li>ブロックの右回転: <strong>R キー</strong></li>
+         </p>
+     </div>
+     </div>
+
+      <!-- ゲームボード -->
+      <div id="container">
+        <canvas id="canvas" class="border"></canvas>
+      </div>
+      <!-- 右側のブロック -->
+      <div class="right">
+          <!-- 次のテトロミノ -->
+          <div id="next__block" class="border"></div>
+          <!-- スコア -->
+          <h2 id="score" class="score__box border">Score</h2>
+          <!-- ボタン -->
+          <div class="btn__box">
+            <button id="pause" class="btn border">Pause</button>
+            <button id="retry" class="btn border">Retry</button>
+          </div>
+      </div>
     <script src="nasu.js"></script>
   </body>
 </html>
