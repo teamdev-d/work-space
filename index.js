@@ -1,6 +1,12 @@
+//suzukiさん----------------------------------------
+// 消したライン数
+let lineCount = 0;
+// スコア計算結果
+let result = 0;
+
 //uppiさん----------------------------------------
 
-"use strict";
+("use strict");
 
 // ポーズ、リスタートボタン
 let isPaused = false;
@@ -28,9 +34,26 @@ document.getElementById("retry").addEventListener("click", function () {
 // ゲーム再開
 gameLoop();
 
-
 //----------------------------------------
+document.getElementById("info").addEventListener("click", function () {
+  // Manualボタンがクリックされたときの処理
+  document.getElementById("modal").style.display = "block";
+  isPaused = !isPaused;
+});
 
+document.getElementById("close-button").addEventListener("click", function () {
+  // モーダル内の閉じるボタンがクリックされたときの処理
+  document.getElementById("modal").style.display = "none";
+  isPaused = !isPaused;
+});
+
+window.addEventListener("click", function (event) {
+  // モーダル外部をクリックしたときの処理
+  if (event.target == document.getElementById("modal")) {
+    document.getElementById("modal").style.display = "none";
+    isPaused = !isPaused;
+  }
+});
 
 // 落下スピード
 const DROP_SPEED = 300;
@@ -43,10 +66,10 @@ const PLAY_SCREEN_WIDTH = 10;
 const PLAY_SCREEN_HEIGHT = 20;
 
 // キャンバスIDの取得
-const CANVAS = document.getElementById('canvas');
+const CANVAS = document.getElementById("canvas");
 
 // 2dコンテキストの取得
-const CANVAS_2D = CANVAS.getContext('2d');
+const CANVAS_2D = CANVAS.getContext("2d");
 
 // キャンバスサイズ（＝プレイ画面のサイズ）
 const CANVAS_WIDTH = BLOCK_SIZE * PLAY_SCREEN_WIDTH;
@@ -111,7 +134,7 @@ let TETRO_TYPES = [
   ],
 ];
 
-const tetColors = ['', '#6CF', '#F92', '#66F', '#C5C', '#FD2', '#F44', '#5B5'];
+const tetColors = ["", "#6CF", "#F92", "#66F", "#C5C", "#FD2", "#F44", "#5B5"];
 
 // TETRO_TYPESのインデックス番号をランダム取得
 let tetroTypesIndex = Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1;
@@ -135,16 +158,19 @@ let isGameOver = false;
 // テトリスプレイ画面描画処理
 const drawPlayScreen = () => {
   // 背景色を黒に指定
-  CANVAS_2D.fillStyle = '#FFF';
+  CANVAS_2D.fillStyle = "#FFF";
 
   // キャンバスを塗りつぶす
   CANVAS_2D.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   // 画面本体で動かせなくなったテトリミノを描画する
   for (let y = 0; y < PLAY_SCREEN_HEIGHT; y++) {
+    // 画面本体の高さ分繰り返す
     for (let x = 0; x < PLAY_SCREEN_WIDTH; x++) {
+      // 画面本体の幅分繰り返す
       if (SCREEN[y][x]) {
-        drawBlock(x, y, SCREEN[y][x]);
+        // 画面本体の座標にブロックがある場合
+        drawBlock(x, y, SCREEN[y][x]); // ブロックを描画する
       }
     }
   }
@@ -164,12 +190,12 @@ const drawPlayScreen = () => {
 
   // ゲームオーバー時のメッセージ
   if (isGameOver) {
-    const GAME_OVER_MESSAGE = 'GAME OVER';
-    CANVAS_2D.font = "40px 'Meiryo UI'";
+    const GAME_OVER_MESSAGE = "GAME OVER";
+    CANVAS_2D.font = "40px 'pf-videotext'";
     const width = CANVAS_2D.measureText(GAME_OVER_MESSAGE).width;
     const x = CANVAS_WIDTH / 2 - width / 2;
     const y = CANVAS_HEIGHT / 2 - 20;
-    CANVAS_2D.fillStyle = 'black';
+    CANVAS_2D.fillStyle = "black";
     CANVAS_2D.fillText(GAME_OVER_MESSAGE, x, y);
   }
 };
@@ -183,7 +209,7 @@ const drawBlock = (x, y, tetroTypesIndex) => {
   CANVAS_2D.fillStyle = tetColors[tetroTypesIndex];
   CANVAS_2D.fillRect(drawX, drawY, BLOCK_SIZE, BLOCK_SIZE);
   // 線の色を黒に設定
-  CANVAS_2D.strokeStyle = 'black';
+  CANVAS_2D.strokeStyle = "black";
   CANVAS_2D.strokeRect(drawX, drawY, BLOCK_SIZE, BLOCK_SIZE);
 };
 
@@ -242,25 +268,25 @@ const createLeftRotateTet = () => {
 document.onkeydown = (e) => {
   if (isGameOver) return;
   switch (e.code) {
-    case 'ArrowLeft':
+    case "ArrowLeft":
       if (canMove(-1, 0)) tetroMinoDistanceX--;
       break;
-    case 'ArrowUp':
+    case "ArrowUp":
       if (canMove(0, -1)) tetroMinoDistanceY--;
       break;
-    case 'ArrowRight':
+    case "ArrowRight":
       if (canMove(1, 0)) tetroMinoDistanceX++;
       break;
-    case 'ArrowDown':
+    case "ArrowDown":
       if (canMove(0, 1)) tetroMinoDistanceY++;
       break;
-    case 'KeyR':
+    case "KeyR":
       let newRTet = createRightRotateTet();
       if (canMove(0, 0, newRTet)) {
         tetroMino = newRTet;
       }
       break;
-    case 'KeyL':
+    case "KeyL":
       let newLTet = createLeftRotateTet();
       if (canMove(0, 0, newLTet)) {
         tetroMino = newLTet;
@@ -303,24 +329,44 @@ const clearLine = () => {
           SCREEN[newY][newX] = SCREEN[newY - 1][newX];
         }
       }
+      lineCount += 1;
     }
   }
+
+  calculateScore(lineCount);
+  drawInfo();
 };
+
+// スコアを計算する関数
+function calculateScore(lineCount) {
+  result = lineCount * 100;
+}
+
+// スコアと消したライン数の表示を行う関数
+function drawInfo() {
+  // ここでメソットごと代入するとループ2回まわるので変数で代入
+  document.getElementById("score-count").innerHTML = result;
+  document.getElementById("line-count").innerHTML = lineCount;
+}
 
 // 落下処理
 const dropTet = () => {
-  if (isGameOver) return;
+  if (isGameOver) return; // ゲームオーバー時は何もしない
   if (canMove(0, 1)) {
-    tetroMinoDistanceY++;
+    // 下に移動できるか判定
+    tetroMinoDistanceY++; // 下に移動
   } else {
-    fixTet();
-    clearLine();
-    tetroTypesIndex = Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1;
-    tetroMino = TETRO_TYPES[tetroTypesIndex];
-    createTetPosition();
+    // 下に移動できない場合
+    fixTet(); // テトリミノを固定する
+    clearLine(); // そろった行を消す
+    tetroTypesIndex = Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1; // テトリミノの種類をランダムに取得
+    tetroMino = TETRO_TYPES[tetroTypesIndex]; // テトリミノを取得する
+    createTetPosition(); // テトリミノの初期位置を設定する
     // 次のテトリミノを出せなくなったらゲームオーバー
     if (!canMove(0, 0)) {
-      isGameOver = true;
+      isGameOver = true; // ゲームオーバーフラグを立てる
+      // テトリミノが動けるか判定
+      console.log("GAME OVER");
       clearInterval(timerId);
     }
   }
@@ -328,8 +374,8 @@ const dropTet = () => {
 };
 
 // 画面を真ん中にする
-const CONTAINER = document.getElementById('container');
-CONTAINER.style.width = CANVAS_WIDTH + 'px';
+const CONTAINER = document.getElementById("container");
+CONTAINER.style.width = CANVAS_WIDTH + "px";
 
 const createTetPosition = () => {
   tetroMinoDistanceX = PLAY_SCREEN_WIDTH / 2 - TET_SIZE / 2;
@@ -352,3 +398,12 @@ const init = () => {
   setInterval(dropTet, DROP_SPEED);
   drawPlayScreen();
 };
+
+
+// 後で見直し
+// リスタートボタン
+const retrybtn = document.getElementById("retry");
+// リスタート
+retrybtn.addEventListener("click", function () {
+  init();
+});

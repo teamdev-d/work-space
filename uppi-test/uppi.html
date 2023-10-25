@@ -23,10 +23,33 @@
     <div class="wrapper">
       <div class="tetris">
         <div>
-          <h1>Tetris</h1>
+        <div>
+        <h1>Tetris</h1>
+        <button id="info" class="btn border">操作説明</button>
+      </div>
+      <!-- モーダル -->
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close" id="close-button">&times;</span>
+          <h2>操作方法</h2>
+          <p>
+            <li>ブロックの左移動: <strong>← キー</strong></li>
+            <li>ブロックの右移動: <strong>→ キー</strong></li>
+            <li>ブロックの下移動: <strong>↓ キー</strong></li>
+            <li>ブロックの左回転: <strong>L キー</strong></li>
+            <li>ブロックの右回転: <strong>R キー</strong></li>
+          </p>
+      </div>
+    </div>
+
           <!-- スコア -->
-          <div id="score" class="score__box border">
-            <h2>Score</h2>
+          <div class="score__box border">
+            <h2 id="score">Score</h2>
+            <p id="score-count"></p>
+          </div>
+          <div class="score__box border">
+            <h2 id="score">Delete Line</h2>
+            <p id="line-count"></p>
           </div>
         </div>
         <!-- ゲームボード -->
