@@ -8,8 +8,9 @@
 }
 
 ul {
-  list-style-position: inside;
+  list-style-position: center;
 }
+
 
 .board {
   background-color: #e5e7eb;

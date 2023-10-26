@@ -16,6 +16,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="font.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>テトリス｜TETRIS</title>
   </head>
   <body>
@@ -30,32 +31,34 @@
             </div>
             <!-- 二列目 -->
             <div class="col-7 d-flex flex-column mx-auto gap-4">
-              <!-- 操作方法ボタン -->
+              <!-- 操作方法ボタンにハンドアイコンを追加 -->
               <button
                 type="button"
                 class="btn btn-outline-dark border-3 font"
                 data-bs-toggle="modal"
                 data-bs-target="#manualModal"
               >
-                操作方法
+                <i class="fas fa-hand-point-up"></i> 操作方法
               </button>
-              <!-- スタートボタン -->
+              <!-- スタートボタンにプレイボタンアイコンを追加 -->
               <button id="start" class="btn btn-outline-dark border-3 font">
-                スタート<i class="fa-solid fa-music mr-2"></i>
+                <i class="fas fa-play"></i> スタート
               </button>
             </div>
             <!-- 三列目 -->
             <div class="col-7 d-flex flex-column mx-auto gap-4">
+              <!-- 一時停止ボタンに一時停止アイコンを追加 -->
               <button id="pause" class="btn btn-outline-dark border-3 font">
-                一時停止
+                <i class="fas fa-pause"></i> 一時停止
               </button>
+              <!-- やり直すボタンにリフレッシュアイコンを追加 -->
               <button
                 type="button"
                 class="btn btn-outline-dark border-3 font"
                 data-bs-toggle="modal"
                 data-bs-target="#confirmModal"
               >
-                やり直す
+                <i class="fas fa-redo"></i> やり直す
               </button>
             </div>
           </div>
@@ -85,10 +88,10 @@
 
             <!-- スコア -->
             <div>
-              <p>スコア</p>
+              <p class="fw-bold">スコア</p>
               <div
                 id="scoreCount"
-                class="col-8 border border-4 border-dark btn-outline-dark m-auto py-4 rounded-3"
+                class="col-8 fs-4 border border-4 border-dark btn-outline-dark m-auto py-4 rounded-3"
               >
                 0
               </div>
@@ -99,7 +102,7 @@
               <p>ライン消去数</p>
               <div
                 id="lineCount"
-                class="col-8 border border-4 border-dark btn-outline-dark m-auto py-4 rounded-3"
+                class="col-8 fs-4 border border-4 border-dark btn-outline-dark m-auto py-4 rounded-3"
               >
                 0
               </div>
@@ -117,7 +120,7 @@
         aria-labelledby="confirmModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="confirmModalLabel">
@@ -144,7 +147,7 @@
                 data-bs-dismiss="modal"
                 id="restart"
               >
-                やり直す
+                はい
               </button>
             </div>
           </div>
@@ -159,7 +162,7 @@
         aria-labelledby="manualModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="manualModalLabel">操作方法</h1>
@@ -175,8 +178,7 @@
                 <li>ブロックの左移動: <strong>← キー</strong></li>
                 <li>ブロックの右移動: <strong>→ キー</strong></li>
                 <li>ブロックの下移動: <strong>↓ キー</strong></li>
-                <li>ブロックの左回転: <strong>L キー</strong></li>
-                <li>ブロックの右回転: <strong>R キー</strong></li>
+                <li>ブロックの回転: <strong>↑ キー</strong></li>
               </ul>
             </div>
             <div class="modal-footer">

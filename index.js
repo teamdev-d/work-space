@@ -223,27 +223,30 @@ document.onkeydown = (e) => {
     case "ArrowLeft":
       if (canMove(-1, 0)) tetroMinoDistanceX--;
       break;
-    case "ArrowUp":
-      if (canMove(0, -1)) tetroMinoDistanceY--;
-      break;
     case "ArrowRight":
       if (canMove(1, 0)) tetroMinoDistanceX++;
       break;
     case "ArrowDown":
       if (canMove(0, 1)) tetroMinoDistanceY++;
       break;
-    case "KeyR":
+    case "ArrowUp":
       let newRTet = createRightRotateTet();
       if (canMove(0, 0, newRTet)) {
         tetroMino = newRTet;
       }
       break;
-    case "KeyL":
-      let newLTet = createLeftRotateTet();
-      if (canMove(0, 0, newLTet)) {
-        tetroMino = newLTet;
-      }
-      break;
+    // case "KeyR":
+    //   let newRTet = createRightRotateTet();
+    //   if (canMove(0, 0, newRTet)) {
+    //     tetroMino = newRTet;
+    //   }
+    // break;
+    // case "KeyL":
+    //   let newLTet = createLeftRotateTet();
+    //   if (canMove(0, 0, newLTet)) {
+    //     tetroMino = newLTet;
+    //   }
+    //   break;
   }
   drawPlayScreen();
 };
@@ -352,7 +355,13 @@ const init = () => {
       SCREEN[y][x] = 0;
     }
   }
+
+  // ポーズ状態をリセット
+  isPaused = false;
+  pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
+
   createTetPosition();
+
   // 落下処理実行
   timerId = setInterval(dropTet, DROP_SPEED);
   drawPlayScreen();
@@ -372,12 +381,11 @@ const reInit = () => {
       SCREEN[y][x] = 0;
     }
   }
-  //テトリミノのランダムな選択
+  // テトリミノのランダムな選択
   tetroTypesIndex = Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1;
   // 位置の初期化
   createTetPosition();
-  // タイマーを再度セット
-  timerId = setInterval(dropTet, DROP_SPEED);
+
   // 画面を再描画
   drawPlayScreen();
   // 消したライン数をリセット
@@ -389,17 +397,23 @@ const reInit = () => {
   // ポーズ状態をリセット
   isPaused = false;
   // ポーズボタンの表示をリセット
-  pauseButton.innerText = "一時停止";
+  pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
 };
 
 // ゲームスタート時の初期化
 document.getElementById("start").addEventListener("click", function () {
+  console.log(isGameOver);
   if (isGameOver) {
     // ゲームオーバー状態から再スタートする場合
     reInit();
   } else {
     init();
   }
+});
+
+// ゲームリスタート時の初期化
+document.getElementById("restart").addEventListener("click", function () {
+  reInit();
 });
 
 // Pauseボタンの取得
@@ -415,16 +429,31 @@ pauseButton.addEventListener("click", function () {
     isPaused = false;
     // タイマー再開
     timerId = setInterval(dropTet, DROP_SPEED);
-    pauseButton.innerText = "一時停止";
+    pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
   } else {
     // ゲームが実行中ならポーズ
     isPaused = true;
     // タイマー停止
     clearInterval(timerId);
-    pauseButton.innerText = "再開 ▶";
+    pauseButton.innerHTML = '<i class="fas fa-play"></i> 再開 ';
   }
 });
 
-document.getElementById("restart").addEventListener("click", function () {
-  reInit(); // ゲームを再起動
+// モーダルが開かれたときの処理 (JQueryを使用)
+$("#manualModal, #confirmModal").on("show.bs.modal", function () {
+  console.log("modal opened");
+  clearInterval(timerId);
+  isPaused = true;
+  pauseButton.innerText = "再開 ▶";
+});
+
+// モーダルが閉じたときの処理 (JQueryを使用)
+$("#manualModal, #confirmModal").on("hidden.bs.modal", function () {
+  console.log("modal closed");
+  if (!isGameOver) {
+    // ゲームオーバーでなければ、ゲームのタイマーを再開
+    timerId = setInterval(dropTet, DROP_SPEED);
+    isPaused = false;
+    pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
+  }
 });
