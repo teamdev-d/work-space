@@ -1,60 +1,3 @@
-//suzukiさん----------------------------------------
-// 消したライン数
-let lineCount = 0;
-// スコア計算結果
-let result = 0;
-
-//uppiさん----------------------------------------
-
-("use strict");
-
-// ポーズ、リスタートボタン
-let isPaused = false;
-// ゲームループ
-function gameLoop() {
-  if (!isPaused) {
-    // ゲームの更新コード
-  }
-  requestAnimationFrame(gameLoop);
-}
-
-// ポーズ
-document.getElementById("pause").addEventListener("click", function () {
-  isPaused = !isPaused;
-  alert("ポーズ");
-  console.log(isPaused);
-});
-// リスタート
-document.getElementById("retry").addEventListener("click", function () {
-  // ゲームの初期化の状態
-  isPaused = true; //一時停止
-  alert("リスタート");
-});
-
-// ゲーム再開
-gameLoop();
-
-//----------------------------------------
-document.getElementById("info").addEventListener("click", function () {
-  // Manualボタンがクリックされたときの処理
-  document.getElementById("modal").style.display = "block";
-  isPaused = !isPaused;
-});
-
-document.getElementById("close-button").addEventListener("click", function () {
-  // モーダル内の閉じるボタンがクリックされたときの処理
-  document.getElementById("modal").style.display = "none";
-  isPaused = !isPaused;
-});
-
-window.addEventListener("click", function (event) {
-  // モーダル外部をクリックしたときの処理
-  if (event.target == document.getElementById("modal")) {
-    document.getElementById("modal").style.display = "none";
-    isPaused = !isPaused;
-  }
-});
-
 // 落下スピード
 const DROP_SPEED = 300;
 
@@ -134,7 +77,16 @@ let TETRO_TYPES = [
   ],
 ];
 
-const tetColors = ["", "#6CF", "#F92", "#66F", "#C5C", "#FD2", "#F44", "#5B5"];
+const tetColors = [
+  "",
+  "#fde047", // yellow
+  "#4ade80", // green
+  "#DC3545", // red
+  "#FFC107", // orange
+  "#0ea5e9", // blue
+  "#8b5cf6", // purple
+  "#DC3545", // red
+];
 
 // TETRO_TYPESのインデックス番号をランダム取得
 let tetroTypesIndex = Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1;
@@ -150,15 +102,15 @@ let tetroMinoDistanceY = 0;
 const SCREEN = [];
 
 // タイマーID
-let timerId = NaN;
+let timerId = null;
 
 // ゲームオーバーフラグ
 let isGameOver = false;
 
 // テトリスプレイ画面描画処理
 const drawPlayScreen = () => {
-  // 背景色を黒に指定
-  CANVAS_2D.fillStyle = "#FFF";
+  // 背景色を指定
+  CANVAS_2D.fillStyle = "#e5e7eb";
 
   // キャンバスを塗りつぶす
   CANVAS_2D.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -191,7 +143,7 @@ const drawPlayScreen = () => {
   // ゲームオーバー時のメッセージ
   if (isGameOver) {
     const GAME_OVER_MESSAGE = "GAME OVER";
-    CANVAS_2D.font = "40px 'pf-videotext'";
+    CANVAS_2D.font = "40px 'dotgothic16";
     const width = CANVAS_2D.measureText(GAME_OVER_MESSAGE).width;
     const x = CANVAS_WIDTH / 2 - width / 2;
     const y = CANVAS_HEIGHT / 2 - 20;
@@ -271,27 +223,30 @@ document.onkeydown = (e) => {
     case "ArrowLeft":
       if (canMove(-1, 0)) tetroMinoDistanceX--;
       break;
-    case "ArrowUp":
-      if (canMove(0, -1)) tetroMinoDistanceY--;
-      break;
     case "ArrowRight":
       if (canMove(1, 0)) tetroMinoDistanceX++;
       break;
     case "ArrowDown":
       if (canMove(0, 1)) tetroMinoDistanceY++;
       break;
-    case "KeyR":
+    case "ArrowUp":
       let newRTet = createRightRotateTet();
       if (canMove(0, 0, newRTet)) {
         tetroMino = newRTet;
       }
       break;
-    case "KeyL":
-      let newLTet = createLeftRotateTet();
-      if (canMove(0, 0, newLTet)) {
-        tetroMino = newLTet;
-      }
-      break;
+    // case "KeyR":
+    //   let newRTet = createRightRotateTet();
+    //   if (canMove(0, 0, newRTet)) {
+    //     tetroMino = newRTet;
+    //   }
+    // break;
+    // case "KeyL":
+    //   let newLTet = createLeftRotateTet();
+    //   if (canMove(0, 0, newLTet)) {
+    //     tetroMino = newLTet;
+    //   }
+    //   break;
   }
   drawPlayScreen();
 };
@@ -337,6 +292,11 @@ const clearLine = () => {
   drawInfo();
 };
 
+// 消したライン数
+let lineCount = 0;
+// スコア計算結果
+let result = 0;
+
 // スコアを計算する関数
 function calculateScore(lineCount) {
   result = lineCount * 100;
@@ -345,8 +305,8 @@ function calculateScore(lineCount) {
 // スコアと消したライン数の表示を行う関数
 function drawInfo() {
   // ここでメソットごと代入するとループ2回まわるので変数で代入
-  document.getElementById("score-count").innerHTML = result;
-  document.getElementById("line-count").innerHTML = lineCount;
+  document.getElementById("scoreCount").innerHTML = result;
+  document.getElementById("lineCount").innerHTML = lineCount;
 }
 
 // 落下処理
@@ -374,9 +334,10 @@ const dropTet = () => {
 };
 
 // 画面を真ん中にする
-const CONTAINER = document.getElementById("container");
-CONTAINER.style.width = CANVAS_WIDTH + "px";
+const BOARD = document.getElementById("board");
+BOARD.style.width = CANVAS_WIDTH + "px"; // ボードの幅をキャンバスの幅に合わせる
 
+// テトリミノの初期位置を設定する
 const createTetPosition = () => {
   tetroMinoDistanceX = PLAY_SCREEN_WIDTH / 2 - TET_SIZE / 2;
   tetroMinoDistanceY = 0;
@@ -384,6 +345,10 @@ const createTetPosition = () => {
 
 // 初期化処理
 const init = () => {
+  if (timerId !== null) {
+    clearInterval(timerId);
+  }
+
   for (let y = 0; y < PLAY_SCREEN_HEIGHT; y++) {
     SCREEN[y] = [];
     for (let x = 0; x < PLAY_SCREEN_WIDTH; x++) {
@@ -391,19 +356,111 @@ const init = () => {
     }
   }
 
-  // テスト用
-  //SCREEN[4][6] = 1;
+  // ポーズ状態をリセット
+  isPaused = false;
+  pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
+
   createTetPosition();
+
   // 落下処理実行
-  setInterval(dropTet, DROP_SPEED);
+  timerId = setInterval(dropTet, DROP_SPEED);
   drawPlayScreen();
 };
 
+// reInit関数
+const reInit = () => {
+  if (timerId !== null) {
+    clearInterval(timerId);
+  }
+  // ゲームオーバー状態をリセット
+  isGameOver = false;
 
-// 後で見直し
-// リスタートボタン
-const retrybtn = document.getElementById("retry");
-// リスタート
-retrybtn.addEventListener("click", function () {
-  init();
+  // 画面本体の初期化
+  for (let y = 0; y < PLAY_SCREEN_HEIGHT; y++) {
+    for (let x = 0; x < PLAY_SCREEN_WIDTH; x++) {
+      SCREEN[y][x] = 0;
+    }
+  }
+  // テトリミノのランダムな選択
+  tetroTypesIndex = Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1;
+  // 位置の初期化
+  createTetPosition();
+
+  // 画面を再描画
+  drawPlayScreen();
+  // 消したライン数をリセット
+  lineCount = 0;
+  // スコアをリセット
+  result = 0;
+  // スコアと消したライン数の表示をリセット
+  drawInfo();
+  // ポーズ状態をリセット
+  isPaused = false;
+  // ポーズボタンの表示をリセット
+  pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
+};
+
+// ゲームスタート時の初期化
+document.getElementById("start").addEventListener("click", function () {
+  console.log(isGameOver);
+  if (isGameOver) {
+    // ゲームオーバー状態から再スタートする場合
+    reInit();
+  } else {
+    init();
+  }
 });
+
+// ゲームリスタート時の初期化
+document.getElementById("restart").addEventListener("click", function () {
+  reInit();
+});
+
+// Pauseボタンの取得
+const pauseButton = document.getElementById("pause");
+
+// ポーズ状態のフラグ
+let isPaused = false;
+
+// Pauseボタンがクリックされたときの処理
+pauseButton.addEventListener("click", function () {
+  if (isPaused) {
+    // ゲームがポーズ中なら再開
+    isPaused = false;
+    // タイマー再開
+    timerId = setInterval(dropTet, DROP_SPEED);
+    pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
+  } else {
+    // ゲームが実行中ならポーズ
+    isPaused = true;
+    // タイマー停止
+    clearInterval(timerId);
+    pauseButton.innerHTML = '<i class="fas fa-play"></i> 再開 ';
+  }
+});
+
+// モーダルが開かれたときの処理 (JQueryを使用)
+$("#manualModal, #confirmModal").on("show.bs.modal", function () {
+  console.log("modal opened");
+  clearInterval(timerId);
+  isPaused = true;
+  pauseButton.innerText = "再開 ▶";
+});
+
+// モーダルが閉じたときの処理 (JQueryを使用)
+$("#manualModal, #confirmModal").on("hidden.bs.modal", function () {
+  console.log("modal closed");
+  if (!isGameOver) {
+    // ゲームオーバーでなければ、ゲームのタイマーを再開
+    timerId = setInterval(dropTet, DROP_SPEED);
+    isPaused = false;
+    pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
+  }
+});
+
+
+
+
+
+
+

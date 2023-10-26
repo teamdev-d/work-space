@@ -1,167 +1,17 @@
-@charset "utf-8";
-
-* {
-    font-family: "pf-videotext", sans-serif;
-    font-weight: 400;
-    font-style: normal;
+.root {
+  background-color: #e5e7eb;
+  font-family: dotgothic16, sans-serif;
 }
 
-h1 {
-    font-size: 4rem;
+.font {
+  font-family: dotgothic16, sans-serif;
 }
 
-h2 {
-    font-size: 2rem;
-    align-items: flex-start;
-}
-
-/* 共通 */ 
-.border {
-    border: 5px solid black;
-}
-
-.btn {
-    width: 200px;
-    height: 50px;
-    font-size: 2rem;
+ul {
+  list-style-position: center;
 }
 
 
-.wrapper {
-    display: flex;
-    height: 100vh;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    margin: 0 10%;
-}
-
-/* bodyを白に指定 */
-body {
-    background: #fff;
-  }
-
-#container {
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ゲームボード */
-/* #game__board {
-    width: 350px;
-    height: 600px;
-    margin-left: 100px;
-    margin-right: 50px;
-    position: relative;
-} */
-
-/* 右側 */
-.right {
-    width: 200px;
-    height: 90wh;
-} 
-
-/* 次のブロック */
-#next__block {
-    height: 200px;
-    margin-bottom: 60px;
-}
-
-/* スコア */
-.score__box {
-    height: 120px;
-    margin-bottom: 80px;
-} 
-
-/* ボタン */
-.btn__box {
-    display: flex;
-    flex-direction:column;
-    margin-bottom: 20px;
-}
-
-#pause {
-    margin-bottom: 20px;
-}
-
-/* スタイル付きのモーダルを作成 */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.7);
-    transition: opacity 0.5s; /* フェードイン/フェードアウトのアニメーション設定 */
-}
-
-.modal-content {
-    background-color: #fff; /* テトリスの背景色に合わせる */
-    padding: 20px;
-    border: 1px solid #000; /* コントラストのある白い枠線 */
-    color: #000; /* 白いテキスト */
-    width: 50%;
-    margin: 15% auto;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); /* 自然な配色の影を追加 */
-    border-radius: 5px; /* 角丸 */
-    text-align: center;
-    font-family: "pf-videotext", sans-serif;
-}
-
-.close {
-    color: #000; /* 閉じるボタンのテキストを白に設定 */
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* モーダル内の見出しスタイル */
-.modal-content h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-/* モーダル内の説明文スタイル */
-.modal-content p {
-    font-size: 1.6rem;
-    line-height: 1.5;
-    margin-bottom: 20px;
-}
-
-/* モーダル内のリストスタイル */
-.modal-content ul {
-    list-style-type: disc;
-    text-align: left;
-    margin-left: 20px;
-}
-
-/* モーダル内のリストアイテムスタイル */
-.modal-content li {
-    font-size: 1.4rem;
-    line-height: 1.4;
-}
-
-/* モーダル内の強調スタイル */
-.modal-content strong {
-    font-weight: bold;
-}
-
-/* モーダル内のアニメーション */
-.modal-content {
-    animation: fadeIn 0.5s /* モーダル表示時のフェードインアニメーション */
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 2;
-    }
+.board {
+  background-color: #e5e7eb;
 }
