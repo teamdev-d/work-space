@@ -20,36 +20,47 @@
     <title>テトリス｜TETRIS</title>
   </head>
   <body>
-    <div class="root vh-100 d-flex justify-content-center align-items-center">
+    <div
+      class="root vh-100 d-flex justify-content-center align-items-md-center"
+    >
       <div class="container">
         <div class="row text-center justify-content-center">
           <!-- 左側のブロック -->
-          <div class="col-3 row d-flex align-items-center">
+          <div
+            class="col-12 col-md-3 row d-flex justify-content-center align-items-center"
+          >
             <!-- タイトル -->
-            <div class="mt-4">
+            <div class="mt-4 mt-md-0">
               <h1 class="display-1 fw-bold mx-auto">Tetris</h1>
             </div>
             <!-- 二列目 -->
-            <div class="col-7 d-flex flex-column mx-auto gap-4">
+            <div
+              class="col-6 col-md-7 d-flex justify-content-around flex-md-column mx-auto gap-4 my-4"
+            >
               <!-- 操作方法ボタンにハンドアイコンを追加 -->
               <button
                 type="button"
-                class="btn btn-outline-dark border-3 font"
+                class="btn btn-outline-dark border-3 font btn-block"
                 data-bs-toggle="modal"
                 data-bs-target="#manualModal"
               >
-                <i class="fas fa-hand-point-up"></i> 操作方法
+                <i class="fas fa-hand-point-up"></i>
+                <span class="d-none d-md-inline">操作方法</span>
               </button>
               <!-- スタートボタンにプレイボタンアイコンを追加 -->
               <button id="start" class="btn btn-outline-dark border-3 font">
-                <i class="fas fa-play"></i> スタート
+                <i class="fas fa-play"></i>
+                <span class="d-none d-md-inline">スタート</span>
               </button>
             </div>
             <!-- 三列目 -->
-            <div class="col-7 d-flex flex-column mx-auto gap-4">
+            <div
+              class="col-6 col-md-7 d-flex justify-content-around flex-md-column mx-auto gap-4"
+            >
               <!-- 一時停止ボタンに一時停止アイコンを追加 -->
               <button id="pause" class="btn btn-outline-dark border-3 font">
-                <i class="fas fa-pause"></i> 一時停止
+                <i class="fas fa-pause"></i>
+                <span class="d-none d-md-inline">一時停止</span>
               </button>
               <!-- やり直すボタンにリフレッシュアイコンを追加 -->
               <button
@@ -58,13 +69,16 @@
                 data-bs-toggle="modal"
                 data-bs-target="#confirmModal"
               >
-                <i class="fas fa-redo"></i> やり直す
+                <i class="fas fa-redo"></i>
+                <span class="d-none d-md-inline">やり直す</span>
               </button>
             </div>
           </div>
 
           <!-- 真ん中のブロック -->
-          <div class="col-3 d-flex justify-content-center align-items-center">
+          <div
+            class="col-12 col-md-3 d-flex justify-content-center align-items-center"
+          >
             <!-- ゲームボード -->
             <div id="board" class="">
               <canvas
@@ -75,36 +89,39 @@
           </div>
 
           <!-- 右側のブロック -->
-          <div class="col-3 row justify-content-center align-items-center">
-            <!-- 次のテトリミノ -->
-            <div>
-              <p>次のブロック</p>
-              <div
-                class="col-8 border border-4 border-dark btn-outline-dark m-auto py-2 rounded-3"
-              >
-                <canvas id="next-block"></canvas>
+          <div class="col-12 col-md-3 row justify-content-center align-items-center my-4 my-md-2 ">
+              <div class="col-6 col-md-12 d-flex justify-content-center">
+                <!-- 次のテトリミノ -->
+                <div class="col-10 col-md-8">
+                  <p>次のブロック</p>
+                  <div
+                    class="border border-4 border-dark btn-outline-dark py-2 rounded-3"
+                  >
+                    <canvas id="next-block"></canvas>
+                  </div>
+                </div>
               </div>
-            </div>
+              <div class="col-6 col-md-8">
+                <!-- スコア -->
+                <div class="col-10 col-md-12 mb-2 mb-md-4">
+                  <p class="fw-bold">スコア</p>
+                  <div
+                    id="scoreCount"
+                    class=" fs-4 border border-4 border-dark btn-outline-dark py-4 rounded-3"
+                  >
+                    0
+                  </div>
+                </div>
 
-            <!-- スコア -->
-            <div>
-              <p class="fw-bold">スコア</p>
-              <div
-                id="scoreCount"
-                class="col-8 fs-4 border border-4 border-dark btn-outline-dark m-auto py-4 rounded-3"
-              >
-                0
-              </div>
-            </div>
-
-            <!-- 消去ライン数 -->
-            <div>
-              <p>ライン消去数</p>
-              <div
-                id="lineCount"
-                class="col-8 fs-4 border border-4 border-dark btn-outline-dark m-auto py-4 rounded-3"
-              >
-                0
+                <!-- 消去ライン数 -->
+                <div class="col-10 col-md-12">
+                  <p>ライン消去数</p>
+                  <div
+                    id="lineCount"
+                    class="fs-4 border border-4 border-dark btn-outline-dark py-4 rounded-3"
+                  >
+                    0
+                </div>
               </div>
             </div>
           </div>

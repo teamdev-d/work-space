@@ -457,3 +457,10 @@ $("#manualModal, #confirmModal").on("hidden.bs.modal", function () {
     pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
   }
 });
+
+
+
+
+
+
+
