@@ -458,26 +458,44 @@ $("#manualModal, #confirmModal").on("hidden.bs.modal", function () {
   }
 });
 
-//次のテトリミノを表示する
-const canvas = document.getElementById('next-block');
-const ctx =canvas.getContext('2d');
-const SCALE = 30;
 
-function drawTetromino(tetromino, color, offsetX, offsetY){
-  ctx.fillSrtyle = color;
-  for (let y = 0; y < tetromino.length; y++){
-    for (let x = 0; x < tetromino[y].length; x++){
-      if (tetromino[y][x]){
-        ctx.fillRect((x + offsetX) * SCALE, (y + offsetY) * SCALE, SCALE, SCALE);
+//次のテトリミノを表示する
+// 次のテトリミノを表示するキャンバス要素を取得
+const nextBlockCanvas = document.getElementById("next-block");
+
+// 2Dコンテキストを取得
+const nextBlockCanvasContext = nextBlockCanvas.getContext("2d");
+
+// 次のテトリミノの種類をランダムに取得
+const nextTetroTypesIndex = Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1;
+
+// 次のテトリミノを描画する関数
+const drawNextTet = () => {
+  // テトリミノの大きさ
+  const TETRO_SIZE = 1;
+
+  // ブロックのサイズ
+  const BLOCK_SIZE = nextBlockCanvas.width / TETRO_SIZE;
+
+  // テトリミノの種類
+  const nextTetroMino = TETRO_TYPES[nextTetroTypesIndex];
+
+  // ブロックを描画する
+  for (let y = 0; y < TETRO_SIZE; y++) {
+    for (let x = 0; x < TETRO_SIZE; x++) {
+      if (nextTetroMino[y][x]) {
+        // 塗りつぶし色を指定
+        nextBlockCanvasContext.fillStyle = tetColors[nextTetroTypesIndex];
+        // ブロックを描画
+        nextBlockCanvasContext.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        // 線の色を指定
+        nextBlockCanvasContext.strokeStyle = "black";
+        // ブロックの枠線を描画
+        nextBlockCanvasContext.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
       }
     }
   }
-}
+};
 
-function disolayNextTetromino(){
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  let color = tetColors[tetroTypesIndex];
-  drawTetromino(tetroMino, color, 0, 0);
-}
-
-displayNextTetromino();//初回表示
+// ゲーム開始時に次のテトリミノを描画
+drawNextTet();
