@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/c4efa77837.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="font.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>テトリス｜TETRIS</title>
+  </head>
+  <body>
+    <div
+      class="root vh-100 d-flex justify-content-center align-items-md-center"
+    >
+      <div class="container">
+        <div class="row text-center justify-content-center">
+          <!-- 左側のブロック -->
+          <div
+            class="col-12 col-md-3 row d-flex justify-content-center align-items-center"
+          >
+            <!-- タイトル -->
+            <div class="mt-4 mt-md-0">
+              <h1 class="display-1 fw-bold mx-auto">Tetris</h1>
+            </div>
+            <!-- 二列目 -->
+            <div
+              class="col-6 col-md-7 d-flex justify-content-around flex-md-column mx-auto gap-4 my-4"
+            >
+              <!-- 操作方法ボタンにハンドアイコンを追加 -->
+              <button
+                type="button"
+                class="btn btn-outline-dark border-3 font btn-block"
+                data-bs-toggle="modal"
+                data-bs-target="#manualModal"
+              >
+                <i class="fas fa-hand-point-up"></i>
+                <span class="d-none d-md-inline">操作方法</span>
+              </button>
+              <!-- スタートボタンにプレイボタンアイコンを追加 -->
+              <button id="start" class="btn btn-outline-dark border-3 font">
+                <i class="fas fa-play"></i>
+                <span class="d-none d-md-inline">スタート</span>
+              </button>
+            </div>
+            <!-- 三列目 -->
+            <div
+              class="col-6 col-md-7 d-flex justify-content-around flex-md-column mx-auto gap-4"
+            >
+              <!-- 一時停止ボタンに一時停止アイコンを追加 -->
+              <button id="pause" class="btn btn-outline-dark border-3 font">
+                <i class="fas fa-pause"></i>
+                <span class="d-none d-md-inline">一時停止</span>
+              </button>
+              <!-- やり直すボタンにリフレッシュアイコンを追加 -->
+              <button
+                type="button"
+                class="btn btn-outline-dark border-3 font"
+                data-bs-toggle="modal"
+                data-bs-target="#confirmModal"
+              >
+                <i class="fas fa-redo"></i>
+                <span class="d-none d-md-inline">やり直す</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 真ん中のブロック -->
+          <div
+            class="col-12 col-md-3 d-flex justify-content-center align-items-center"
+          >
+            <!-- ゲームボード -->
+            <div id="board" class="">
+              <canvas
+                id="canvas"
+                class="board border border-4 border-dark btn-outline-dark rounded-3"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- 右側のブロック -->
+          <div class="col-12 col-md-3 row justify-content-center align-items-center my-4 my-md-2 ">
+              <div class="col-6 col-md-12 d-flex justify-content-center">
+                <!-- 次のテトリミノ -->
+                <div class="col-10 col-md-8">
+                  <p>次のブロック</p>
+                  <div
+                    class="border border-4 border-dark btn-outline-dark py-2 rounded-3"
+                  >
+                    <canvas id="next-block"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 col-md-8">
+                <!-- スコア -->
+                <div class="col-10 col-md-12 mb-2 mb-md-4">
+                  <p class="fw-bold">スコア</p>
+                  <div
+                    id="scoreCount"
+                    class=" fs-4 border border-4 border-dark btn-outline-dark py-4 rounded-3"
+                  >
+                    0
+                  </div>
+                </div>
+
+                <!-- 消去ライン数 -->
+                <div class="col-10 col-md-12">
+                  <p>ライン消去数</p>
+                  <div
+                    id="lineCount"
+                    class="fs-4 border border-4 border-dark btn-outline-dark py-4 rounded-3"
+                  >
+                    0
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- モーダル -->
+      <!-- リスタートモダル -->
+      <div
+        class="modal fade"
+        id="confirmModal"
+        tabindex="-1"
+        aria-labelledby="confirmModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmModalLabel">
+                本当にやり直しますか？
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                キャンセル
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+                id="restart"
+              >
+                はい
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 操作方法モーダル -->
+      <div
+        class="modal fade"
+        id="manualModal"
+        tabindex="-1"
+        aria-labelledby="manualModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="manualModalLabel">操作方法</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <ul>
+                <li>ブロックの左移動: <strong>← キー</strong></li>
+                <li>ブロックの右移動: <strong>→ キー</strong></li>
+                <li>ブロックの下移動: <strong>↓ キー</strong></li>
+                <li>ブロックの回転: <strong>↑ キー</strong></li>
+              </ul>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                閉じる
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="haru.js"></script>
+  </body>
+</html>

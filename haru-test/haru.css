@@ -1,0 +1,17 @@
+.root {
+    background-color: #e5e7eb;
+    font-family: dotgothic16, sans-serif;
+  }
+  
+  .font {
+    font-family: dotgothic16, sans-serif;
+  }
+  
+  ul {
+    list-style-position: center;
+  }
+  
+  
+  .board {
+    background-color: #e5e7eb;
+  }
