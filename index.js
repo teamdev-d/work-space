@@ -1,3 +1,11 @@
+//効果音
+const gameSound = document.getElementById("gameSound");
+gameSound.loop = true;
+const gameOverSound = document.getElementById("gameOver");
+const manualSound = document.getElementById("manualSound");
+const pauseSound = document.getElementById("pauseSound");
+const scoreUpSound = document.getElementById("scoreUpSound");
+
 // 落下スピード
 const DROP_SPEED = 300;
 
@@ -149,6 +157,8 @@ const drawPlayScreen = () => {
     const y = CANVAS_HEIGHT / 2 - 20;
     CANVAS_2D.fillStyle = "black";
     CANVAS_2D.fillText(GAME_OVER_MESSAGE, x, y);
+    gameSound.pause();
+    gameOverSound.play();
   }
 };
 
@@ -277,6 +287,7 @@ const clearLine = () => {
       }
     }
     if (isClearLine) {
+      scoreUpSound.play();
       // そろった行から上へ向かってforループしていく
       for (let newY = y; newY > 0; newY--) {
         for (let newX = 0; newX < PLAY_SCREEN_WIDTH; newX++) {
@@ -287,7 +298,6 @@ const clearLine = () => {
       lineCount += 1;
     }
   }
-
   calculateScore(lineCount);
   drawInfo();
 };
@@ -326,7 +336,6 @@ const dropTet = () => {
     if (!canMove(0, 0)) {
       isGameOver = true; // ゲームオーバーフラグを立てる
       // テトリミノが動けるか判定
-      console.log("GAME OVER");
       clearInterval(timerId);
     }
   }
@@ -342,6 +351,58 @@ const createTetPosition = () => {
   tetroMinoDistanceX = PLAY_SCREEN_WIDTH / 2 - TET_SIZE / 2;
   tetroMinoDistanceY = 0;
 };
+
+const startButton = document.getElementById("start");
+// ゲームスタート時の初期化
+startButton.addEventListener("click", function () {
+  console.log(isGameOver);
+  gameStartSound.play();
+  gameSound.play();
+  startButton.disabled = true;
+  if (isGameOver) {
+    // ゲームオーバー状態から再スタートする場合
+    reInit();
+  } else {
+    init();
+  }
+});
+
+// ゲームリスタート時の初期化
+const restartButton = document.getElementById("restart");
+restartButton.addEventListener("click", function () {
+  reInit();
+  startButton.disabled = true;
+});
+
+// Pauseボタンの取得
+const pauseButton = document.getElementById("pause");
+pauseButton.disabled = true;
+
+// ポーズ状態のフラグ
+let isPaused = false;
+
+// Pauseボタンがクリックされたときの処理
+pauseButton.addEventListener("click", function () {
+  if (isPaused) {
+    // ゲームがポーズ中なら再開
+    isPaused = false;
+    // タイマー再開
+    timerId = setInterval(dropTet, DROP_SPEED);
+    pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
+    if (isGameOn) gameSound.play();
+    pauseSound.play();
+  } else {
+    // ゲームが実行中ならポーズ
+    isPaused = true;
+    // タイマー停止
+    clearInterval(timerId);
+    pauseButton.innerHTML = '<i class="fas fa-play"></i> 再開 ';
+    if (isGameOn) gameSound.pause();
+    pauseSound.play();
+  }
+});
+
+let isGameOn = false;
 
 // 初期化処理
 const init = () => {
@@ -365,6 +426,8 @@ const init = () => {
   // 落下処理実行
   timerId = setInterval(dropTet, DROP_SPEED);
   drawPlayScreen();
+  isGameOn = true;
+  pauseButton.disabled = false;
 };
 
 // reInit関数
@@ -398,46 +461,12 @@ const reInit = () => {
   isPaused = false;
   // ポーズボタンの表示をリセット
   pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
+  // ゲームスタート時の音を再生
+  gameSound.currentTime = 0;
+  gameSound.play();
+  isGameOn = true;
+  pauseButton.disabled = false;
 };
-
-// ゲームスタート時の初期化
-document.getElementById("start").addEventListener("click", function () {
-  console.log(isGameOver);
-  if (isGameOver) {
-    // ゲームオーバー状態から再スタートする場合
-    reInit();
-  } else {
-    init();
-  }
-});
-
-// ゲームリスタート時の初期化
-document.getElementById("restart").addEventListener("click", function () {
-  reInit();
-});
-
-// Pauseボタンの取得
-const pauseButton = document.getElementById("pause");
-
-// ポーズ状態のフラグ
-let isPaused = false;
-
-// Pauseボタンがクリックされたときの処理
-pauseButton.addEventListener("click", function () {
-  if (isPaused) {
-    // ゲームがポーズ中なら再開
-    isPaused = false;
-    // タイマー再開
-    timerId = setInterval(dropTet, DROP_SPEED);
-    pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
-  } else {
-    // ゲームが実行中ならポーズ
-    isPaused = true;
-    // タイマー停止
-    clearInterval(timerId);
-    pauseButton.innerHTML = '<i class="fas fa-play"></i> 再開 ';
-  }
-});
 
 // モーダルが開かれたときの処理 (JQueryを使用)
 $("#manualModal, #confirmModal").on("show.bs.modal", function () {
@@ -445,6 +474,10 @@ $("#manualModal, #confirmModal").on("show.bs.modal", function () {
   clearInterval(timerId);
   isPaused = true;
   pauseButton.innerText = "再開 ▶";
+  manualSound.play();
+  if (isGameOn) {
+    gameSound.pause();
+  }
 });
 
 // モーダルが閉じたときの処理 (JQueryを使用)
@@ -455,12 +488,90 @@ $("#manualModal, #confirmModal").on("hidden.bs.modal", function () {
     timerId = setInterval(dropTet, DROP_SPEED);
     isPaused = false;
     pauseButton.innerHTML = '<i class="fas fa-pause"></i> 一時停止';
+    if (isGameOn) {
+      gameSound.play();
+    }
   }
 });
 
+//次のテトリミノを表示する
+// 次のテトリミノを表示するキャンバス要素を取得
+const nextBlockCanvas = document.getElementById("next-block");
 
+// 2Dコンテキストを取得
+const nextBlockCanvasContext = nextBlockCanvas.getContext("2d");
 
+// 次のテトリミノの種類をランダムに取得
+const nextTetroTypesIndex =
+  Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1;
 
+// 次のテトリミノを描画する関数
+const drawNextTet = () => {
+  // テトリミノの大きさ
+  const TETRO_SIZE = 1;
 
+  // ブロックのサイズ
+  const BLOCK_SIZE = nextBlockCanvas.width / TETRO_SIZE;
 
+  // テトリミノの種類
+  const nextTetroMino = TETRO_TYPES[nextTetroTypesIndex];
 
+  // ブロックを描画する
+  for (let y = 0; y < TETRO_SIZE; y++) {
+    for (let x = 0; x < TETRO_SIZE; x++) {
+      if (nextTetroMino[y][x]) {
+        // 塗りつぶし色を指定
+        nextBlockCanvasContext.fillStyle = tetColors[nextTetroTypesIndex];
+        // ブロックを描画
+        nextBlockCanvasContext.fillRect(
+          x * BLOCK_SIZE,
+          y * BLOCK_SIZE,
+          BLOCK_SIZE,
+          BLOCK_SIZE
+        );
+        // 線の色を指定
+        nextBlockCanvasContext.strokeStyle = "black";
+        // ブロックの枠線を描画
+        nextBlockCanvasContext.strokeRect(
+          x * BLOCK_SIZE,
+          y * BLOCK_SIZE,
+          BLOCK_SIZE,
+          BLOCK_SIZE
+        );
+      }
+    }
+  }
+};
+
+// ゲーム開始時に次のテトリミノを描画
+drawNextTet();
+
+// ミュートボタン
+const muteButton = document.getElementById("muteButton");
+
+// ゲームサウンドの初期ミュート状態を保持
+let isMuted = false;
+
+// ミュートボタンのテキストとアイコンを切り替える関数
+function toggleMute() {
+  if (isMuted) {
+    gameSound.muted = false;
+    gameOverSound.muted = false;
+    manualSound.muted = false;
+    pauseSound.muted = false;
+    scoreUpSound.muted = false;
+
+    muteButton.innerHTML = '<i class="fas fa-volume-up pe-2"></i>ON';
+  } else {
+    gameSound.muted = true;
+    gameOverSound.muted = true;
+    manualSound.muted = true;
+    pauseSound.muted = true;
+    scoreUpSound.muted = true;
+    muteButton.innerHTML = '<i class="fas fa-volume-off pe-2"></i>OFF';
+  }
+  isMuted = !isMuted;
+}
+
+// ミュートボタンがクリックされたときにミュートをトグル
+muteButton.addEventListener("click", toggleMute);
