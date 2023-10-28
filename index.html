@@ -10,12 +10,17 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Montserrat:wght@100;400;900&family=Ubuntu:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script
       src="https://kit.fontawesome.com/c4efa77837.js"
       crossorigin="anonymous"
     ></script>
-    <script src="font.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>テトリス｜TETRIS</title>
   </head>
@@ -24,23 +29,23 @@
       class="root vh-100 d-flex justify-content-center align-items-md-center"
     >
       <div class="container">
-        <div class="row text-center justify-content-center">
+        <div class="row text-center justify-content-center mx-md-5 px-md-5">
           <!-- 左側のブロック -->
           <div
-            class="col-12 col-md-3 row d-flex justify-content-center align-items-center"
+            class="col-12 col-md-4 row d-flex justify-content-center align-items-center mx-auto my-4 my-md-0"
           >
             <!-- タイトル -->
             <div class="mt-4 mt-md-0">
-              <h1 class="display-1 fw-bold mx-auto">Tetris</h1>
+              <h1 class="display-1 fw-bold pr-2">Tetris</h1>
             </div>
             <!-- 二列目 -->
             <div
-              class="col-6 col-md-7 d-flex justify-content-around flex-md-column mx-auto gap-4 my-4"
+              class="col-6 col-md-7 d-flex justify-content-around flex-md-column mx-auto gap-4"
             >
               <!-- 操作方法ボタンにハンドアイコンを追加 -->
               <button
                 type="button"
-                class="btn btn-outline-dark border-3 font btn-block"
+                class="btn btn-outline-dark border-3 font btn-block mx-md-2"
                 data-bs-toggle="modal"
                 data-bs-target="#manualModal"
               >
@@ -48,36 +53,50 @@
                 <span class="d-none d-md-inline">操作方法</span>
               </button>
               <!-- スタートボタンにプレイボタンアイコンを追加 -->
-              <button id="start" class="btn btn-outline-dark border-3 font">
+              <button
+                id="start"
+                class="btn btn-outline-dark border-3 font mx-md-2"
+              >
                 <i class="fas fa-play"></i>
                 <span class="d-none d-md-inline">スタート</span>
               </button>
             </div>
             <!-- 三列目 -->
             <div
-              class="col-6 col-md-7 d-flex justify-content-around flex-md-column mx-auto gap-4"
+              class="col-6 col-md-7 d-flex justify-content-around flex-md-column gap-4"
             >
               <!-- 一時停止ボタンに一時停止アイコンを追加 -->
-              <button id="pause" class="btn btn-outline-dark border-3 font">
+              <button
+                id="pause"
+                class="btn btn-outline-dark border-3 font mx-2"
+              >
                 <i class="fas fa-pause"></i>
                 <span class="d-none d-md-inline">一時停止</span>
               </button>
               <!-- やり直すボタンにリフレッシュアイコンを追加 -->
               <button
                 type="button"
-                class="btn btn-outline-dark border-3 font"
+                class="btn btn-outline-dark border-3 font mx-md-2"
                 data-bs-toggle="modal"
                 data-bs-target="#confirmModal"
               >
                 <i class="fas fa-redo"></i>
                 <span class="d-none d-md-inline">やり直す</span>
               </button>
+              <!-- ミュートボタンにミュートアイコンを追加 -->
+              <button
+                id="muteButton"
+                class="btn btn-outline-dark border-3 font mx-md-2"
+              >
+                <i class="fas fa-volume-up"></i>
+                ON
+              </button>
             </div>
           </div>
 
           <!-- 真ん中のブロック -->
           <div
-            class="col-12 col-md-3 d-flex justify-content-center align-items-center"
+            class="col-12 col-md-4 d-flex justify-content-center align-items-center"
           >
             <!-- ゲームボード -->
             <div id="board" class="">
@@ -89,38 +108,40 @@
           </div>
 
           <!-- 右側のブロック -->
-          <div class="col-12 col-md-3 row justify-content-center align-items-center my-4 my-md-2 ">
-              <div class="col-6 col-md-12 d-flex justify-content-center">
-                <!-- 次のテトリミノ -->
-                <div class="col-10 col-md-8">
-                  <p>次のブロック</p>
-                  <div
-                    class="border border-4 border-dark btn-outline-dark py-2 rounded-3"
-                  >
-                    <canvas id="next-block"></canvas>
-                  </div>
+          <div
+            class="col-12 col-md-4 row justify-content-center align-items-center my-4 my-md-2 mx-auto"
+          >
+            <div class="col-6 col-md-12 d-flex justify-content-center">
+              <!-- 次のテトリミノ -->
+              <div class="col-10 col-md-7">
+                <p>次のブロック</p>
+                <div
+                  class="border border-4 border-dark btn-outline-dark py-2 rounded-3"
+                >
+                  <canvas id="next-block"></canvas>
                 </div>
               </div>
-              <div class="col-6 col-md-8">
-                <!-- スコア -->
-                <div class="col-10 col-md-12 mb-2 mb-md-4">
-                  <p class="fw-bold">スコア</p>
-                  <div
-                    id="scoreCount"
-                    class=" fs-4 border border-4 border-dark btn-outline-dark py-4 rounded-3"
-                  >
-                    0
-                  </div>
+            </div>
+            <div class="col-6 col-md-7">
+              <!-- スコア -->
+              <div class="col-10 col-md-12 mb-2 mb-md-4">
+                <p class="fw-bold">スコア</p>
+                <div
+                  id="scoreCount"
+                  class="fs-4 border border-4 border-dark btn-outline-dark py-4 rounded-3"
+                >
+                  0
                 </div>
+              </div>
 
-                <!-- 消去ライン数 -->
-                <div class="col-10 col-md-12">
-                  <p>ライン消去数</p>
-                  <div
-                    id="lineCount"
-                    class="fs-4 border border-4 border-dark btn-outline-dark py-4 rounded-3"
-                  >
-                    0
+              <!-- 消去ライン数 -->
+              <div class="col-10 col-md-12">
+                <p>ライン消去数</p>
+                <div
+                  id="lineCount"
+                  class="fs-4 border border-4 border-dark btn-outline-dark py-4 rounded-3"
+                >
+                  0
                 </div>
               </div>
             </div>
@@ -211,7 +232,13 @@
         </div>
       </div>
     </div>
-
+    <!-- ゲーム音楽 -->
+    <audio src="./sound/retrogamecenter3.mp3" id="gameSound"></audio>
+    <audio src="./sound/gameover2_8bit.mp3" id="gameOver"></audio>
+    <audio src="./sound/決定ボタンを押す42.mp3" id="gameStartSound"></audio>
+    <audio src="./sound/キャンセル3.mp3" id="manualSound"></audio>
+    <audio src="./sound/キャンセル7.mp3" id="pauseSound"></audio>
+    <audio src="./sound/ゲージ回復1.mp3" id="scoreUpSound"></audio>
     <script src="index.js"></script>
   </body>
 </html>
