@@ -1,6 +1,6 @@
 # 初級開発コース
 ## 成果物
-### テトリス：https://github.com/teamdev-d/work-space
+### テトリス：tetris-teamd.vercel.app/
 ![](img/tetris.png)
 
 ## 目的
