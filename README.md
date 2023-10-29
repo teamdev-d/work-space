@@ -1,6 +1,6 @@
 # 初級開発コース
 ## 成果物
-テトリス：https://github.com/teamdev-d/work-space
+### テトリス：https://github.com/teamdev-d/work-space
 ![](img/tetris.png)
 
 ## 目的
