@@ -92,5 +92,5 @@
 - BGM機能
 
 ## 参考記事
-メイン：https://qiita.com/namakoRice/items/4933e77a41b2ac359229
-サ　ブ：https://tech.pjin.jp/blog/2021/08/01/js-tetoris/
+- メイン：https://qiita.com/namakoRice/items/4933e77a41b2ac359229
+- サ　ブ：https://tech.pjin.jp/blog/2021/08/01/js-tetoris/
