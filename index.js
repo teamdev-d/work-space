@@ -1,13 +1,14 @@
 //効果音
 const gameSound = document.getElementById("gameSound");
 gameSound.loop = true;
+gameSound.volume = 0.3;
 const gameOverSound = document.getElementById("gameOver");
 const manualSound = document.getElementById("manualSound");
 const pauseSound = document.getElementById("pauseSound");
 const scoreUpSound = document.getElementById("scoreUpSound");
 
 // 落下スピード
-const DROP_SPEED = 300;
+const DROP_SPEED = 400;
 
 // 1ブロックの大きさ
 const BLOCK_SIZE = 30;
@@ -261,6 +262,40 @@ document.onkeydown = (e) => {
   drawPlayScreen();
 };
 
+// HTMLのボタン要素に対応するIDを指定
+const leftButton = document.getElementById("leftButton");
+const rightButton = document.getElementById("rightButton");
+const downButton = document.getElementById("downButton");
+const upButton = document.getElementById("upButton");
+
+// ボタンをクリックしたときの処理を定義
+leftButton.addEventListener("click", () => {
+  if (isGameOver) return;
+  if (canMove(-1, 0)) tetroMinoDistanceX--;
+  drawPlayScreen();
+});
+
+rightButton.addEventListener("click", () => {
+  if (isGameOver) return;
+  if (canMove(1, 0)) tetroMinoDistanceX++;
+  drawPlayScreen();
+});
+
+downButton.addEventListener("click", () => {
+  if (isGameOver) return;
+  if (canMove(0, 1)) tetroMinoDistanceY++;
+  drawPlayScreen();
+});
+
+upButton.addEventListener("click", () => {
+  if (isGameOver) return;
+  let newRTet = createRightRotateTet();
+  if (canMove(0, 0, newRTet)) {
+    tetroMino = newRTet;
+  }
+  drawPlayScreen();
+});
+
 // テトリミノを固定する
 const fixTet = () => {
   for (let y = 0; y < TET_SIZE; y++) {
@@ -494,57 +529,57 @@ $("#manualModal, #confirmModal").on("hidden.bs.modal", function () {
   }
 });
 
-//次のテトリミノを表示する
-// 次のテトリミノを表示するキャンバス要素を取得
-const nextBlockCanvas = document.getElementById("next-block");
+// //次のテトリミノを表示する
+// // 次のテトリミノを表示するキャンバス要素を取得
+// const nextBlockCanvas = document.getElementById("next-block");
 
-// 2Dコンテキストを取得
-const nextBlockCanvasContext = nextBlockCanvas.getContext("2d");
+// // 2Dコンテキストを取得
+// const nextBlockCanvasContext = nextBlockCanvas.getContext("2d");
 
-// 次のテトリミノの種類をランダムに取得
-const nextTetroTypesIndex =
-  Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1;
+// // 次のテトリミノの種類をランダムに取得
+// const nextTetroTypesIndex =
+//   Math.floor(Math.random() * (TETRO_TYPES.length - 1)) + 1;
 
-// 次のテトリミノを描画する関数
-const drawNextTet = () => {
-  // テトリミノの大きさ
-  const TETRO_SIZE = 1;
+// // 次のテトリミノを描画する関数
+// const drawNextTet = () => {
+//   // テトリミノの大きさ
+//   const TETRO_SIZE = 1;
 
-  // ブロックのサイズ
-  const BLOCK_SIZE = nextBlockCanvas.width / TETRO_SIZE;
+//   // ブロックのサイズ
+//   const BLOCK_SIZE = nextBlockCanvas.width / TETRO_SIZE;
 
-  // テトリミノの種類
-  const nextTetroMino = TETRO_TYPES[nextTetroTypesIndex];
+//   // テトリミノの種類
+//   const nextTetroMino = TETRO_TYPES[nextTetroTypesIndex];
 
-  // ブロックを描画する
-  for (let y = 0; y < TETRO_SIZE; y++) {
-    for (let x = 0; x < TETRO_SIZE; x++) {
-      if (nextTetroMino[y][x]) {
-        // 塗りつぶし色を指定
-        nextBlockCanvasContext.fillStyle = tetColors[nextTetroTypesIndex];
-        // ブロックを描画
-        nextBlockCanvasContext.fillRect(
-          x * BLOCK_SIZE,
-          y * BLOCK_SIZE,
-          BLOCK_SIZE,
-          BLOCK_SIZE
-        );
-        // 線の色を指定
-        nextBlockCanvasContext.strokeStyle = "black";
-        // ブロックの枠線を描画
-        nextBlockCanvasContext.strokeRect(
-          x * BLOCK_SIZE,
-          y * BLOCK_SIZE,
-          BLOCK_SIZE,
-          BLOCK_SIZE
-        );
-      }
-    }
-  }
-};
+//   // ブロックを描画する
+//   for (let y = 0; y < TETRO_SIZE; y++) {
+//     for (let x = 0; x < TETRO_SIZE; x++) {
+//       if (nextTetroMino[y][x]) {
+//         // 塗りつぶし色を指定
+//         nextBlockCanvasContext.fillStyle = tetColors[nextTetroTypesIndex];
+//         // ブロックを描画
+//         nextBlockCanvasContext.fillRect(
+//           x * BLOCK_SIZE,
+//           y * BLOCK_SIZE,
+//           BLOCK_SIZE,
+//           BLOCK_SIZE
+//         );
+//         // 線の色を指定
+//         nextBlockCanvasContext.strokeStyle = "black";
+//         // ブロックの枠線を描画
+//         nextBlockCanvasContext.strokeRect(
+//           x * BLOCK_SIZE,
+//           y * BLOCK_SIZE,
+//           BLOCK_SIZE,
+//           BLOCK_SIZE
+//         );
+//       }
+//     }
+//   }
+// };
 
-// ゲーム開始時に次のテトリミノを描画
-drawNextTet();
+// // ゲーム開始時に次のテトリミノを描画
+// drawNextTet();
 
 // ミュートボタン
 const muteButton = document.getElementById("muteButton");
